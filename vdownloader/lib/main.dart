@@ -38,7 +38,7 @@ class _appState extends State<app> {
             bottom: TabBar(
               tabs: [
                 Tab(text: "Download"),
-                Tab(text: "Quaue"),
+                Tab(text: "Queue"),
               ],
             ),
           ),
@@ -62,7 +62,7 @@ class _appState extends State<app> {
                             controller: urlController,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              hintText: "Paste a Video or URL link....",
+                              hintText: "Paste Video URL ....",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                                 fontWeight: FontWeight.bold,
