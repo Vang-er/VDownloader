@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:VDownloader/global.dart';
+import 'package:vdownloader/global.dart';
 import 'package:flutter/services.dart';
-import 'package:VDownloader/services/api_functions.dart';
+import 'package:vdownloader/services/api_functions.dart';
 
 class DownloadPage extends StatefulWidget {
   const DownloadPage({super.key});

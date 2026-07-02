@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:VDownloader/pages/history_page.dart';
-import 'package:VDownloader/pages/setting_page.dart';
-import 'package:VDownloader/pages/download_page.dart';
+import 'package:vdownloader/pages/history_page.dart';
+import 'package:vdownloader/pages/setting_page.dart';
+import 'package:vdownloader/pages/download_page.dart';
 import 'global.dart';
 
 final pages = [DownloadPage(), HistoryPage(), SettingsPage()];
