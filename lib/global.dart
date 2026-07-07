@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 final channel = WebSocketChannel.connect(
-  Uri.parse("ws://$backend_ip:5000/progress"),
+  Uri.parse("ws://$backend_ip:$backend_port/progress"),
 );
 final progressStream = channel.stream.asBroadcastStream();
 final TextEditingController urlController = TextEditingController();
@@ -24,7 +24,8 @@ bool show_info = false;
 bool info_latch = false;
 bool show_warn = false;
 bool is_progressing = false;
-String backend_ip = "10.12.86.188";
+String backend_ip = "127.0.0.1";
+int backend_port = 7070;
 String dwnbtntxt = "Check";
 String warn_msg = "TEST";
 String duration_procced = "00:00";

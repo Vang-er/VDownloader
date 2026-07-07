@@ -1,5 +1,4 @@
 from flask import Flask ,request,jsonify
-from pprint import pprint
 from pathlib import Path
 from flask_sock import Sock
 import yt_dlp
@@ -13,7 +12,15 @@ progress = ""
 VDback = Flask(__name__)
 sock = Sock(VDback)
 cur_OS = platform.system()
+print(cur_OS)
 path = f"{Path.home()}/Downloads/"
+def start_server():
+    app.run(
+        host="0.0.0.0",
+        port=7070,
+        threaded=True,
+        debug=True
+    )
 def pros_duration(time):
     if time == None:
         return "00:00"
@@ -190,7 +197,9 @@ def get_info(url):
         print(e)
         print("malformed input")
         return {"sucess":False,"error":str(e)} , 400
-
+@VDback.route("/")
+def up():
+    return "server is up and ready to recivive commands!!!"
 @VDback.route("/Info",methods=['POST'])
 def Get_info():
     url_info = request.json["url"]

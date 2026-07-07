@@ -122,41 +122,41 @@ class _DownloadPageState extends State<DownloadPage> {
                                 if (data != null) {
                                   urlController.text =
                                       urlController.text + (data.text ?? '');
-                                  await get_info(urlController.text, 5000).then(
-                                    (info) {
-                                      if (info["sucess"] == true) {
-                                        setState(() {
-                                          vidinfo = info;
-                                          videoFormats = info["video_formats"];
-                                          audioFormats = info["audio_formats"];
-                                          if (vidinfo["video_formats"]
-                                              .isNotEmpty) {
-                                            selectedVideo =
-                                                vidinfo["video_formats"]
-                                                    .first["id"];
-                                          }
-                                          if (vidinfo["audio_formats"]
-                                              .isNotEmpty) {
-                                            selectedAudio =
-                                                vidinfo["audio_formats"]
-                                                    .first["id"];
-                                          }
-                                          duration_procced = pros_duartion(
-                                            vidinfo["duration"],
-                                          );
-                                          vid_title = vidinfo["title"];
-                                          vid_data_loaded = true;
-                                          show_info = true;
-                                          dwnbtnicon = Icons.download;
-                                          dwnbtntxt = "Download";
-                                          updateTotal();
-                                        });
-                                      }
-                                      if (info["sucess"] == false) {
-                                        warn_msg = "";
-                                      }
-                                    },
-                                  );
+                                  await get_info(urlController.text).then((
+                                    info,
+                                  ) {
+                                    if (info["sucess"] == true) {
+                                      setState(() {
+                                        vidinfo = info;
+                                        videoFormats = info["video_formats"];
+                                        audioFormats = info["audio_formats"];
+                                        if (vidinfo["video_formats"]
+                                            .isNotEmpty) {
+                                          selectedVideo =
+                                              vidinfo["video_formats"]
+                                                  .first["id"];
+                                        }
+                                        if (vidinfo["audio_formats"]
+                                            .isNotEmpty) {
+                                          selectedAudio =
+                                              vidinfo["audio_formats"]
+                                                  .first["id"];
+                                        }
+                                        duration_procced = pros_duartion(
+                                          vidinfo["duration"],
+                                        );
+                                        vid_title = vidinfo["title"];
+                                        vid_data_loaded = true;
+                                        show_info = true;
+                                        dwnbtnicon = Icons.download;
+                                        dwnbtntxt = "Download";
+                                        updateTotal();
+                                      });
+                                    }
+                                    if (info["sucess"] == false) {
+                                      warn_msg = "";
+                                    }
+                                  });
                                 }
                                 setState(() {
                                   isLoading = false;
@@ -529,10 +529,9 @@ class _DownloadPageState extends State<DownloadPage> {
                               });
                               if (urlController.text != "") {
                                 if (vid_data_loaded == false) {
-                                  await get_info(
-                                    urlController.text,
-                                    5000,
-                                  ).then((info) {
+                                  await get_info(urlController.text).then((
+                                    info,
+                                  ) {
                                     if (info["sucess"] == true) {
                                       setState(() {
                                         vidinfo = info;
@@ -562,7 +561,7 @@ class _DownloadPageState extends State<DownloadPage> {
                                     } else if (info["sucess"] == false) {
                                       setState(() {
                                         show_info = false;
-                                        warn_msg = "Please enter a vaild URL";
+                                        warn_msg = info["error"];
                                         show_warn = true;
                                       });
                                       Future.delayed(Duration(seconds: 5), () {
@@ -575,13 +574,12 @@ class _DownloadPageState extends State<DownloadPage> {
                                 } else if (vid_data_loaded == true) {
                                   sendurl(
                                     urlController.text,
-                                    5000,
                                     selectedVideo,
                                     selectedAudio,
                                   ).then((info) {
                                     if (info["sucess"] == false) {
                                       setState(() {
-                                        warn_msg = "Please enter a vaild URL";
+                                        warn_msg = info["error"];
                                         show_warn = true;
                                       });
                                       Future.delayed(Duration(seconds: 5), () {

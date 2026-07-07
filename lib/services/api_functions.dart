@@ -27,9 +27,9 @@ String proc_size(double size) {
   }
 }
 
-Future sendurl(String url, int port, vformat, aformat) async {
+Future sendurl(String url, vformat, aformat) async {
   final reponse = await http.post(
-    Uri.parse("http://$backend_ip:$port/Download"),
+    Uri.parse("http://$backend_ip:$backend_port/Download"),
     headers: {"Content-Type": "application/json"},
     body: jsonEncode({
       "url": url,
@@ -58,9 +58,9 @@ String pros_duartion(dynamic duration) {
   }
 }
 
-Future get_info(url, port) async {
+Future get_info(url) async {
   final reponse = await http.post(
-    Uri.parse("http://$backend_ip:$port/Info"),
+    Uri.parse("http://$backend_ip:$backend_port/Info"),
     headers: {"Content-Type": "application/json"},
     body: jsonEncode({"url": url}),
   );

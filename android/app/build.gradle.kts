@@ -2,13 +2,13 @@ plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.chaquo.python")
 }
 
 android {
     namespace = "com.example.vdownloader"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -42,4 +42,21 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+chaquopy {
+
+    defaultConfig {
+
+        version = "3.11"
+
+        pip {
+
+            install("flask")
+            install("yt-dlp")
+            install("flask-sock")
+
+        }
+
+    }
+
 }
