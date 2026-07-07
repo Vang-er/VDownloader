@@ -14,13 +14,15 @@ sock = Sock(VDback)
 cur_OS = platform.system()
 print(cur_OS)
 path = f"{Path.home()}/Downloads/"
-def start_server():
+def start_server(ffmpeg_dir):
     app.run(
         host="0.0.0.0",
         port=7070,
         threaded=True,
         debug=True
     )
+    global FFMPEG_DIR
+    FFMPEG_DIR = ffmpeg_dir
 def pros_duration(time):
     if time == None:
         return "00:00"
@@ -216,6 +218,7 @@ def Get_info():
         "video_formats": best_video,
         "audio_formats": best_audio,
         "sucess":True,
+        "ffmpeg_location": FFMPEG_DIR,
         })
     except Exception as e:
         return {"sucess":False,"error":str(e)} , 400

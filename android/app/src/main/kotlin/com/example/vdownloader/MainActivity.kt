@@ -53,7 +53,7 @@ class MainActivity : FlutterActivity() {
             Thread {
                 try {
                     Log.i("VDownloader", "Starting backend...")
-                    backend.callAttr("start_server")
+                    backend.callAttr("start_server",applicationInfo.nativeLibraryDir)
                 } catch (e: Exception) {
                     Log.e("VDownloader", "Backend crashed", e)
                 }

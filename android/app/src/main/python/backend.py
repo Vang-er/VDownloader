@@ -4,6 +4,7 @@ from pathlib import Path
 from flask_sock import Sock
 import yt_dlp
 import platform
+import os
 trigger = 0
 state = None
 current_ws = None
@@ -14,7 +15,11 @@ VDback = Flask(__name__)
 sock = Sock(VDback)
 cur_OS = platform.system()
 path = f"{Path.home()}/Downloads/"
-def start_server():
+def start_server(ffmpeg_dir):
+    global FFMPEG_DIR
+    FFMPEG_DIR = ffmpeg_dir
+    print("FFmpeg directory:")
+    print(FFMPEG_DIR)
     VDback.run(
         host="0.0.0.0",
         port=7070,
@@ -256,7 +261,10 @@ def get_url():
     "embedsubtitles":True,  
     "writeautomaticsub": False,  
     "progress_hooks":[progress_track],
-    "ffmpeg_location": "/data/user/0/com.example.vdownloader/files",
+    "ffmpeg_location": os.path.join(
+    FFMPEG_DIR,
+    "libffmpeg.so"
+),
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
