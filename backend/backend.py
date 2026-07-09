@@ -1,8 +1,10 @@
 from flask import Flask ,request,jsonify
+from pprint import pprint
 from pathlib import Path
 from flask_sock import Sock
 import yt_dlp
 import platform
+import os
 trigger = 0
 state = None
 current_ws = None
@@ -12,17 +14,17 @@ progress = ""
 VDback = Flask(__name__)
 sock = Sock(VDback)
 cur_OS = platform.system()
-print(cur_OS)
-path = f"{Path.home()}/Downloads/"
 def start_server(ffmpeg_dir):
-    app.run(
+    global FFMPEG_DIR
+    FFMPEG_DIR = ffmpeg_dir
+    print("FFmpeg directory:")
+    print(FFMPEG_DIR)
+    VDback.run(
         host="0.0.0.0",
         port=7070,
         threaded=True,
-        debug=True
+        debug=False
     )
-    global FFMPEG_DIR
-    FFMPEG_DIR = ffmpeg_dir
 def pros_duration(time):
     if time == None:
         return "00:00"
@@ -36,9 +38,31 @@ def pros_duration(time):
         return f"{minute}:{second}"
     else:
         return f"00:{second}"
+def get_os():
+    if "ANDROID_ROOT" in os.environ:
+        return "android"
+
+    if platform.system() == "Windows":
+        return "windows"
+
+    if platform.system() == "Linux":
+        return "linux"
+
+    if platform.system() == "Darwin":
+        return "mac"
+
+    return "unknown"
+system = get_os()
+
+if system == "android":
+    download_path = "/storage/emulated/0/Download"
+elif system == "linux":
+    download_path = os.path.expanduser("~/Downloads")
+elif system == "windows":
+    download_path = str(Path.home() / "Downloads")
 def progress_track(data):
     global progress, web_socket, trigger, state
-
+    print(data)
     if web_socket is None:
         print("web socket is none")
 
@@ -218,13 +242,13 @@ def Get_info():
         "video_formats": best_video,
         "audio_formats": best_audio,
         "sucess":True,
-        "ffmpeg_location": FFMPEG_DIR,
         })
     except Exception as e:
         return {"sucess":False,"error":str(e)} , 400
 @VDback.route("/Download",methods=['POST'])
 def get_url():
     global state
+    global ydl_opt
     data = request.get_json()
 
     if not data or "url" not in data or ("vformat" not in data and "aformat" not in data):  
@@ -238,28 +262,44 @@ def get_url():
     req_format = [videoFormat,audioFormat]  
     state = data['state']  
     print(state)  
+    mp3_compute = []
+    merge_state = None
     if state == 0 :  
-        fin_format = f"{req_format[0]}"  
-        fext = "mp4"  
+        fin_format = f"{req_format[0]}"    
+        merge_state = "mp4"
     elif state == 1:  
         fin_format = f"{req_format[0]}+{req_format[1]}"  
-        fext = "mp4"  
+        merge_state = "mp4"
     elif state == 2:  
         fin_format = f"{req_format[1]}"  
-        fext = "mp3"  
+        merge_state = None
+        mp3_compute = [
+    {
+        "key": "FFmpegExtractAudio",
+        "preferredcodec": "mp3",
+        "preferredquality": "0",
+    }
+]  
     else:  
         fin_format = f"{req_format[0]}+{req_format[1]}"  
-        fext = "mp4"  
+        merge_state = "mp4"  
     ydl_opts = {  
     "format": fin_format,  
-    "outtmpl": f"{path} %(title)s.{fext}",  
+    "outtmpl": f"{download_path}/%(title)s.%(ext)s",
     "noplaylist": True,  
+    "embedthumbnail": True,
     "writethumbnail": True,  
     "writesubtitles":True,  
     "embedsubtitles":True,  
-    "writeautomaticsub": False,  
-    "progress_hooks":[progress_track]
-
+    "writeautomaticsub": False, 
+    "keepvideo": False, 
+    "postprocessors": mp3_compute,
+    "merge_output_format":merge_state,
+    "progress_hooks":[progress_track],
+    "ffmpeg_location": os.path.join(
+    FFMPEG_DIR,
+    "libffmpeg.so"
+),
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

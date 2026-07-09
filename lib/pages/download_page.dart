@@ -533,16 +533,19 @@ class _DownloadPageState extends State<DownloadPage> {
                                     info,
                                   ) {
                                     if (info["sucess"] == true) {
+                                      print(
+                                        "working------------------working--------------",
+                                      );
                                       setState(() {
                                         vidinfo = info;
 
                                         videoFormats = info["video_formats"];
                                         audioFormats = info["audio_formats"];
 
-                                        if (videoFormats.isNotEmpty) {
-                                          selectedVideoId =
-                                              videoFormats.first["id"];
-                                        }
+                                        selectedVideo = vidinfo["video_formats"]
+                                            .first["id"];
+                                        selectedAudio = vidinfo["audio_formats"]
+                                            .first["id"];
 
                                         duration_procced = pros_duartion(
                                           vidinfo["duration"],
@@ -572,11 +575,15 @@ class _DownloadPageState extends State<DownloadPage> {
                                     }
                                   });
                                 } else if (vid_data_loaded == true) {
-                                  sendurl(
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  final info = await sendurl(
                                     urlController.text,
                                     selectedVideo,
                                     selectedAudio,
-                                  ).then((info) {
+                                  );
+                                  (info) {
                                     if (info["sucess"] == false) {
                                       setState(() {
                                         warn_msg = info["error"];
@@ -588,7 +595,7 @@ class _DownloadPageState extends State<DownloadPage> {
                                         });
                                       });
                                     }
-                                  });
+                                  };
                                 }
                               } else {
                                 setState(() {
