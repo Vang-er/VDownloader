@@ -65,16 +65,22 @@ class MainActivity : FlutterActivity() {
         File(applicationInfo.nativeLibraryDir).listFiles()?.forEach {
             Log.i("VDownloader", it.name)
         }
-
+        Log.i("VDownloader","VDownloader000")
         try {
+            Log.i("VDownloader","VDownloader001")
             if (!Python.isStarted()) {
+                Log.i("VDownloader","VDownloader002")
                 Python.start(AndroidPlatform(this))
+                Log.i("VDownloader","VDownloader003")
             }
-
+            Log.i("VDownloader","VDownloader004")
             val py = Python.getInstance()
+            Log.i("VDownloader","VDownloader005")
             val backend = py.getModule("backend")
+            Log.i("VDownloader","VDownloader006")
 
             Thread {
+                Log.i("VDownloader","VDownloader007")
                 try {
                     Log.i("VDownloader", "Starting backend...")
                     backend.callAttr("start_server",applicationInfo.nativeLibraryDir)

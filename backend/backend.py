@@ -5,6 +5,7 @@ from flask_sock import Sock
 import yt_dlp
 import platform
 import os
+from pathlib import Path
 trigger = 0
 state = None
 current_ws = None
@@ -60,63 +61,48 @@ elif system == "linux":
     download_path = os.path.expanduser("~/Downloads")
 elif system == "windows":
     download_path = str(Path.home() / "Downloads")
+def postpros(data):
+    print("post pros happend")
+    print(f"9987:{data.keys()}")
+    print(f"9987:{data.get('status')}")
+    print(f"9987:{data.get('postprocessor')}")
+    print(f"9987:{data.get('_default_template')}")
+    progress = f"Running - {data.get('postprocessor')}"
+    if web_socket is not None:
+        web_socket.send(progress)
 def progress_track(data):
     global progress, web_socket, trigger, state
     print(data)
     if web_socket is None:
         print("web socket is none")
+    tmpfilename = data.get("tmpfilename")
+    print(f"ext_is:{tmpfilename}")
+    if tmpfilename:
+        name = Path(tmpfilename).name
+        print(f"ext_is:{name}")
+        if name.endswith(".part"):
+            name = name[:-5] 
+        ext = Path(name).suffix.lower().lstrip(".")
+        print(f"ext_is:{ext}")
+        if ext in {"mp4", "mkv", "webm", "avi", "mov"}:
+            filename = "Video"
 
-    # -----------------------------
-    # Video only
-    # -----------------------------
-    if state == 0:
+        elif ext in {"m4a", "mp3", "opus", "aac", "wav", "flac"}:
+            filename = "Audio"
 
-        if data.get("status") == "downloading":
-            progress = (f"Downloading Video | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
+        elif ext in {"vtt", "srt", "ass"}:
+            filename = "Subtitles"
+
+        elif ext in {"jpg", "jpeg", "png", "webp"}:
+            filename = "Thumbnail"
 
         else:
-            progress = data.get("status")
-
-    # -----------------------------
-    # Audio only
-    # -----------------------------
-    elif state == 2:
-
-        if data.get("status") == "downloading":
-            progress = (f"Downloading Audio | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
-            print(progress)
-
-        else:
-            progress = data.get("status")
-            print(progress)
-
-    # -----------------------------
-    # Video + Audio
-    # -----------------------------
-    elif state == 1:
-        print("started")
-        if trigger == 0:
-            print("phase1")
-            if data.get("status") == "downloading":
-                progress = (f"Downloading Video | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
-                print(progress)
-
-            elif data.get("status") == "finished":
-                trigger = 1
-
-        elif trigger == 1:
-            
-            if data.get("status") == "downloading":
-                progress = (f"Downloading Audio | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
-                print(progress)
-            elif data.get("status") == "finished":
-                trigger = 2
-
-        if trigger == 2:
-            progress = "Finished"
-            print(progress)
-            trigger = 0
-
+            filename = ext
+    elif filename == None:
+        filename = ""
+    else:
+        filename = "Unknown"
+    progress = (f"{data.get('status')} {filename} | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
     if web_socket is not None:
         web_socket.send(progress)
 def proc_channel(channel):
@@ -134,10 +120,6 @@ def proc_format(info):
     for fmt in info.get("formats", []):
 
         filesize = fmt.get("filesize") or fmt.get("filesize_approx") or float("inf")
-
-        # -----------------------------
-        # Video Only
-        # -----------------------------
         if fmt.get("vcodec") != "none" and fmt.get("acodec") == "none":
 
             height = fmt.get("height", 0)
@@ -155,9 +137,6 @@ def proc_format(info):
                     "filesize": filesize,
                 }
 
-        # -----------------------------
-        # Audio Only
-        # -----------------------------
         elif fmt.get("vcodec") == "none" and fmt.get("acodec") != "none":
 
             abr = int(fmt.get("abr") or 0)
@@ -176,10 +155,6 @@ def proc_format(info):
                     "size": proc_size(filesize if filesize != float("inf") else None),
                     "filesize": filesize,
                 }
-
-        # -----------------------------
-        # Video + Audio
-        # -----------------------------
         elif fmt.get("vcodec") != "none" and fmt.get("acodec") != "none":
 
             height = fmt.get("height", 0)
@@ -221,7 +196,7 @@ def get_info(url):
             return ydl.extract_info(url,download=False)
     except Exception as e:
         print(e)
-        print("malformed input")
+        print(f"malformed input0: {e}")
         return {"sucess":False,"error":str(e)} , 400
 @VDback.route("/")
 def up():
@@ -296,18 +271,26 @@ def get_url():
     "postprocessors": mp3_compute,
     "merge_output_format":merge_state,
     "progress_hooks":[progress_track],
+    "postprocessor_hooks":[postpros],
+    "verbose": True,
     "ffmpeg_location": os.path.join(
     FFMPEG_DIR,
-    "libffmpeg.so"
+    "libffmpeg.so",
+    
 ),
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
+            progress = "Finished"
+            if web_socket is not None:
+                web_socket.send(progress)
             return {"status":"200"}
     except Exception as e:
+        if web_socket is not None:
+            web_socket.send("Error -Restart app")
         print(e)
-        print("malformed input")
+        print(f"malformed input: {e}")
         return {"sucess":False,"error":str(e)}, 400
 @sock.route("/progress")
 def progress(ws):
