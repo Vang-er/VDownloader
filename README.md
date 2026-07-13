@@ -1,5 +1,4 @@
-# VDownloader
-<p align="center"><img src="readme_assets/LOGO.png" width="700"></p>
+<p align="center"><img src="readme_assets/LOGO.png" width="1000"></p>
 
 ## Getting Started
 
