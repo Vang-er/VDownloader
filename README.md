@@ -1,5 +1,5 @@
 # VDownloader
-![Home Screen](readme_assets/LOGO.png)
+<img src="readme_assets/LOGO.png" width="300">
 
 ## Getting Started
 
