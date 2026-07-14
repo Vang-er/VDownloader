@@ -47,7 +47,7 @@ To solve this, I packaged the FFmpeg binaries as native libraries by renaming th
 
 ### 2- Clone the repo
 ### 3- Run `flutter build apk --release` from the project root.
-## Limitaions
+## Limitations
 ### The UI still doesn't expose all yt-dlp features, but I plan to improve this in future releases!
 ### Thumbnail and subtitle embedding is currently not working.
 ### The download process currently fails if an invalid URL is entered. Restarting the app is required.
