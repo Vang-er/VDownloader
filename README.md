@@ -29,7 +29,13 @@
 ### UI => Dart(Flutter)
 ### Backend => Python
 ## Challenges
-### In this project , i faced multiple implementation challenges that thanks Allah i could solve them, first one is to run an upsteam yt-dlp direclty on andriod ,most yt-dlp anroid warpper uses youtubedl-android as it a ready made java library for yt-dlp but it miss that it is not always the latest version ,i solved that problem by running the backend with Chaquopy ,second challenge was to bundle pre built binaries with the app (like ffmpeg) and i tried to copy them from the assets folder and excute them but because of write XOR execute android 10+ polisy , i couldn't run ,to solve such problem ,we spoffed the name of the binary to let the android packager laod it as a dynamic library and be loaded into the runtime 
+### Building VDownloader came with several technical challenges.
+
+The first challenge was running the upstream `yt-dlp` directly on Android. Most Android yt-dlp wrappers rely on `youtubedl-android`, which is a convenient Java library but often lags behind the latest upstream releases. I wanted VDownloader to always use the official `yt-dlp`, so I integrated a Python backend into the Flutter application using Chaquopy.
+
+The second challenge was bundling prebuilt native binaries such as FFmpeg. My initial approach was to copy the binaries from the application's assets and execute them at runtime. However, Android 10+ enforces the Write XOR Execute (W^X) security policy, which prevents applications from executing files copied into writable storage.
+
+To solve this, I packaged the FFmpeg binaries as native libraries by renaming them with the `.so` extension. This allowed Android to package them correctly and load them from the application's native library directory at runtime.
 ## Building
 ### 1- Download Dependencies
 
@@ -58,3 +64,5 @@
 </h4>
 
 ### The remaining code was either written entirely by me or developed under my supervision with the assistance of AI. I was also learning both Dart and Flutter while building this project.
+## Special thanks
+### Thanks to all who made yt-dlp and ffmpeg 
