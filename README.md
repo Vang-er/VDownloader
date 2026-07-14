@@ -11,6 +11,7 @@
   &nbsp;&nbsp;&nbsp;
   <img src="readme_assets/screen3.jpg" width="200">
 </p>
+
 ## What is VDownloader?
 ### VDownloader is a cross platform yt-dlp wrapper app built with flutter and python.
 ## Why VDownloader?
@@ -27,6 +28,8 @@
 ## Tech Stack
 ### UI => Dart(Flutter)
 ### Backend => Python
+## Challenges
+### In this project , i faced multiple implementation challenges that thanks Allah i could solve them, first one is to run an upsteam yt-dlp direclty on andriod ,most yt-dlp anroid warpper uses youtubedl-android as it a ready made java library for yt-dlp but it miss that it is not always the latest version ,i solved that problem by running the backend with Chaquopy ,second challenge was to bundle pre built binaries with the app (like ffmpeg) and i tried to copy them from the assets folder and excute them but because of write XOR execute android 10+ polisy , i couldn't run ,to solve such problem ,we spoffed the name of the binary to let the android packager laod it as a dynamic library and be loaded into the runtime 
 ## Building
 ### 1- Download Dependencies
 
@@ -39,7 +42,7 @@
 ### 2- Clone the repo
 ### 3- Run `flutter build apk --release` from the project root.
 ## Limitaions
-### Still the UI can't expose all yt-dlp functuions but i plan too!
+### The UI still doesn't expose all yt-dlp features, but I plan to improve this in future releases!
 ### Thumbnail and subtitle embedding is currently not working.
 ### The download process currently fails if an invalid URL is entered. Restarting the app is required.
 ## Future Plans
@@ -54,4 +57,4 @@
   <li>Drop down logic in the UI</li>
 </h4>
 
-### remaining code is ***either*** built genunily by me or was supervisoed by a chatbot   NOTE: i was learning both dart and flutter while building that project
+### The remaining code was either written entirely by me or developed under my supervision with the assistance of AI. I was also learning both Dart and Flutter while building this project.
