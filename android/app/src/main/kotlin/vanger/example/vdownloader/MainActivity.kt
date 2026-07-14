@@ -1,4 +1,4 @@
-package com.example.vdownloader
+package com.vanger.vdownloader
 
 import android.os.Bundle
 import android.util.Log

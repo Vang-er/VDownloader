@@ -77,6 +77,7 @@ def progress_track(data):
         print("web socket is none")
     tmpfilename = data.get("tmpfilename")
     print(f"ext_is:{tmpfilename}")
+    filename = ""
     if tmpfilename:
         name = Path(tmpfilename).name
         print(f"ext_is:{name}")
@@ -98,10 +99,8 @@ def progress_track(data):
 
         else:
             filename = ext
-    elif filename == None:
-        filename = ""
     else:
-        filename = "Unknown"
+        tmpfilename = data.get("filename")
     progress = (f"{data.get('status')} {filename} | {int(data.get('_percent'))}% | {pros_duration(data.get('eta'))}")
     if web_socket is not None:
         web_socket.send(progress)

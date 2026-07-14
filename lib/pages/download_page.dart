@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vdownloader/global.dart';
 import 'package:flutter/services.dart';
 import 'package:vdownloader/services/api_functions.dart';
+import 'dart:async';
 
 class DownloadPage extends StatefulWidget {
   const DownloadPage({super.key});
@@ -529,23 +530,21 @@ class _DownloadPageState extends State<DownloadPage> {
                               });
                               if (urlController.text != "") {
                                 if (vid_data_loaded == false) {
-                                  await get_info(urlController.text).then((
-                                    info,
-                                  ) {
+                                  try {
+                                    final info = await get_info(
+                                      urlController.text,
+                                    ).timeout(const Duration(seconds: 30));
+
                                     if (info["sucess"] == true) {
-                                      print(
-                                        "working------------------working--------------",
-                                      );
                                       setState(() {
                                         vidinfo = info;
-
                                         videoFormats = info["video_formats"];
                                         audioFormats = info["audio_formats"];
 
-                                        selectedVideo = vidinfo["video_formats"]
-                                            .first["id"];
-                                        selectedAudio = vidinfo["audio_formats"]
-                                            .first["id"];
+                                        selectedVideo =
+                                            videoFormats.first["id"];
+                                        selectedAudio =
+                                            audioFormats.first["id"];
 
                                         duration_procced = pros_duartion(
                                           vidinfo["duration"],
@@ -556,33 +555,75 @@ class _DownloadPageState extends State<DownloadPage> {
                                         dwnbtnicon = Icons.download;
                                         dwnbtntxt = "Download";
                                         updateTotal();
-                                        // selectedAudio = null;
-                                        // selectedVideo = null;
-                                        // videoFormats.clear();
-                                        // audioFormats.clear();
                                       });
-                                    } else if (info["sucess"] == false) {
+                                    } else {
                                       setState(() {
                                         show_info = false;
                                         warn_msg = info["error"];
                                         show_warn = true;
                                       });
-                                      Future.delayed(Duration(seconds: 5), () {
-                                        setState(() {
-                                          show_warn = false;
-                                        });
-                                      });
+
+                                      Future.delayed(
+                                        const Duration(seconds: 5),
+                                        () {
+                                          if (!mounted) return;
+                                          setState(() => show_warn = false);
+                                        },
+                                      );
                                     }
-                                  });
+                                  } on TimeoutException {
+                                    setState(() {
+                                      show_warn = true;
+                                      warn_msg = "Request timed out";
+                                    });
+
+                                    Future.delayed(
+                                      const Duration(seconds: 5),
+                                      () {
+                                        if (!mounted) return;
+                                        setState(() => show_warn = false);
+                                      },
+                                    );
+                                  }
                                 } else if (vid_data_loaded == true) {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  final info = await sendurl(
-                                    urlController.text,
-                                    selectedVideo,
-                                    selectedAudio,
-                                  );
+                                  try {
+                                    final info = await sendurl(
+                                      urlController.text,
+                                      selectedVideo,
+                                      selectedAudio,
+                                    ).timeout(const Duration(seconds: 40));
+
+                                    if (info["sucess"] == false) {
+                                      setState(() {
+                                        warn_msg = info["error"];
+                                        show_warn = true;
+                                      });
+
+                                      Future.delayed(
+                                        const Duration(seconds: 5),
+                                        () {
+                                          if (!mounted) return;
+                                          setState(() => show_warn = false);
+                                        },
+                                      );
+                                    }
+                                  } on TimeoutException {
+                                    setState(() {
+                                      show_warn = true;
+                                      warn_msg = "Download failed";
+                                    });
+
+                                    Future.delayed(
+                                      const Duration(seconds: 5),
+                                      () {
+                                        if (!mounted) return;
+                                        setState(() => show_warn = false);
+                                      },
+                                    );
+                                  }
                                   (info) {
                                     if (info["sucess"] == false) {
                                       setState(() {
