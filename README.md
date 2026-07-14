@@ -1,6 +1,16 @@
 <p align="center"><img src="readme_assets/trimmed2.png" width="1000"></p>
 
 # A modern, open-source cross-platform GUI for yt-dlp built with Flutter and Python.
+## Screenshots
+<p align="center">
+  <img src="readme_assets/screen0.jpg" width="200">
+  &nbsp;&nbsp;&nbsp;
+  <img src="readme_assets/screen1.jpg" width="200">
+  &nbsp;&nbsp;&nbsp;
+  <img src="readme_assets/screen2.jpg" width="200">
+  &nbsp;&nbsp;&nbsp;
+  <img src="readme_assets/screen3.jpg" width="200">
+</p>
 ## What is VDownloader?
 ### VDownloader is a cross platform yt-dlp wrapper app built with flutter and python.
 ## Why VDownloader?
@@ -13,17 +23,6 @@
     <li>Quailty format selector which backend downloads best codec to the same quality to save size</li>
     <li>Downloading video thumbnails and subtitle files (Embedding is not available in pre-v0.2 because the required dependencies are not yet included.)</li>
   </h3>
-
-## Screenshots
-<p align="center">
-  <img src="readme_assets/screen0.jpg" width="220">
-  &nbsp;&nbsp;&nbsp;
-  <img src="readme_assets/screen1.jpg" width="220">
-  &nbsp;&nbsp;&nbsp;
-  <img src="readme_assets/screen2.jpg" width="220">
-  &nbsp;&nbsp;&nbsp;
-  <img src="readme_assets/screen3.jpg" width="220">
-</p>
 
 ## Tech Stack
 ### UI => Dart(Flutter)
