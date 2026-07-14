@@ -34,7 +34,7 @@ class _HistoryPageState extends State<HistoryPage> {
               SizedBox(height: 8),
 
               Text(
-                "This feature is under development.",
+                "Coming in next releases ,stay tuned !!!",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
             ],

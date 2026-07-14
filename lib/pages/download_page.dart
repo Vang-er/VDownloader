@@ -1,3 +1,4 @@
+// somehow the button timeout function don't work ,i will fix it later as i am very tired
 import 'package:flutter/material.dart';
 import 'package:vdownloader/global.dart';
 import 'package:flutter/services.dart';
@@ -47,7 +48,7 @@ class _DownloadPageState extends State<DownloadPage> {
               onPressed: () {},
               icon: Icon(Icons.notifications_outlined),
               iconSize: 30,
-              tooltip: "tes123",
+              tooltip: "notifications | coming soon",
               color: const Color.fromARGB(255, 255, 255, 255),
             ),
           ],

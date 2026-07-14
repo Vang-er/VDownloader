@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(height: 8),
 
               Text(
-                "This feature is under development.",
+                "Coming in next releases ,keep tuned!!!",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
             ],

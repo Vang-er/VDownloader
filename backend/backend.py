@@ -1,5 +1,4 @@
 from flask import Flask ,request,jsonify
-from pprint import pprint
 from pathlib import Path
 from flask_sock import Sock
 import yt_dlp
@@ -293,13 +292,6 @@ def get_url():
         return {"sucess":False,"error":str(e)}, 400
 @sock.route("/progress")
 def progress(ws):
-    # global progress,last_progress,web_socket
-    # web_socket = ws
-    # while True:
-    #     ws.receive()
-    # while progress != last_progress:
-    #     ws.send(progress)
-    #     last_progress = progress
     global web_socket,current_ws
     current_ws = ws
     web_socket = ws
