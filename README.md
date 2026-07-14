@@ -1,15 +1,22 @@
-<p align="center"><img src="readme_assets/trimmed2pnG" width="1000"></p>
+<p align="center"><img src="readme_assets/trimmed2.png" width="1000"></p>
 
-## Getting Started
+## What is VDownloader?
+### VDownloader is a cross platform yt-dlp warpper app built with flutter and python.
+## Why VDownloader?
+### one of the things to pushed me to work on such a project that i noticed that all yt-dlp warpers are missing something important ,standradization which i focued on + to provede a GUI that both simple and advanced users can benefit from .
+## Features (till pre V0.2)
 
-This project is a starting point for a Flutter application.
+  <h3>
+    <li>Downloading separte videos from youtube</li>
+    <li>Downloading audio without video and vice versa</li>
+    <li>Quailty format selector which filters best quailty to size</li>
+    <li>Downloading thumbnail and subtitles files of the video(but till verison pre-V0.2 ,embeding depencies wasn't provided so it won't work</li>
+  </h3>
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<p align="center">
+  <img src="readme_assets/screen0" width="220">
+  <img src="readme_assets/screen1" width="220">
+  <img src="readme_assets/screen2" width="220">
+  <img src="readme_assets/screen3" width="220">
+</p>
