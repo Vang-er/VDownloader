@@ -1,5 +1,5 @@
 <p align="center"><img src="readme_assets/trimmed2.png" width="1000"></p>
-
+# A modern, open-source cross-platform GUI for yt-dlp built with Flutter and Python.
 ## What is VDownloader?
 ### VDownloader is a cross platform yt-dlp wrapper app built with flutter and python.
 ## Why VDownloader?
